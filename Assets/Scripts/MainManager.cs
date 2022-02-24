@@ -11,12 +11,16 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+
     public GameObject GameOverText;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
+    private static bool gameIsPaused = false;
+
+    private GameObject pauseMenuOpen;
 
     
     // Start is called before the first frame update
@@ -36,10 +40,25 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        pauseMenuOpen = GameObject.Find("PauseMenuOpen");
+
+        pauseMenuOpen.SetActive(false);
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (gameIsPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
         if (!m_Started)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -60,6 +79,8 @@ public class MainManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
+
+        
     }
 
     void AddPoint(int point)
@@ -68,9 +89,32 @@ public class MainManager : MonoBehaviour
         ScoreText.text = $"Score : {m_Points}";
     }
 
+   
+
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+    public void Resume()
+    {
+        pauseMenuOpen.SetActive(false);
+        Time.timeScale = 1.0f;
+        gameIsPaused = false;
+    }
+
+    public void Pause()
+    {
+        pauseMenuOpen.SetActive(true);
+        Time.timeScale = 0.0f;
+        gameIsPaused = true;
+    }
+
+    public void Quit()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+   
 }
