@@ -11,14 +11,18 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text HighScoreText;
 
     public GameObject GameOverText;
     
     private bool m_Started = false;
     private int m_Points;
+    private int highScorePoints;
     
     private bool m_GameOver = false;
     private static bool gameIsPaused = false;
+
+    public static string userName;
 
     private GameObject pauseMenuOpen;
 
@@ -80,6 +84,11 @@ public class MainManager : MonoBehaviour
             }
         }
 
+        if (m_Points > highScorePoints)
+        {
+            HighScore();
+        }
+
         
     }
 
@@ -89,7 +98,11 @@ public class MainManager : MonoBehaviour
         ScoreText.text = $"Score : {m_Points}";
     }
 
-   
+    void HighScore()
+    {
+        highScorePoints = m_Points;
+        HighScoreText.text = $"High Score : {userName} {highScorePoints}";
+    }
 
     public void GameOver()
     {
@@ -116,5 +129,5 @@ public class MainManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-   
+ 
 }
